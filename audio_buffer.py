@@ -44,16 +44,18 @@ class AudioBuffer:
             sleep(0.1)
 
     
-    
     def _collect_data(self):
-        n = True
         while True:
             raw_data = self.stream.read(self.CHUNK)
-            self.outstream.write(raw_data)
             
             
             decoded = np.frombuffer(raw_data, np.int16)
-            
+            m = np.fft.rfft(decoded)
+            m = np.roll(m,40)
+            m[0:40] = 0
+            nm = np.fft.irfft(m)
+            ns = nm.astype(np.int16)
+            self.outstream.write(ns.tobytes())
             self.frames.append(decoded)
 
         
