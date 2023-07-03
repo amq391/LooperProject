@@ -22,6 +22,7 @@ def start_recording_audio():
         with wave.open('sample.wav', 'w') as f:
             f.setparams((1, 2, 16000, 512, "NONE", "NONE"))
             f.writeframes(struct.pack("h" * len(audio), *audio))
+            
     finally:
         recorder.delete()
         print("sample recorded and saved")
@@ -32,8 +33,8 @@ def stop_recording_audio():
 
 def playback_audio():
     print("Playing recorded audio...")
-    with wave.open('sample.wav', 'r') as f:
-        playsound('sample.wav')
+    #with wave.open('sample.wav', 'r') as f:
+    playsound('sample.wav')
 
 def main():
     app = QApplication([])
