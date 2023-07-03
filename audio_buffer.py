@@ -51,8 +51,8 @@ class AudioBuffer:
             
             decoded = np.frombuffer(raw_data, np.int16)
             m = np.fft.rfft(decoded)
-            m = np.roll(m,40)
-            m[0:40] = 0
+            m = np.roll(m,70)
+            m[0:70] = 0
             nm = np.fft.irfft(m)
             ns = nm.astype(np.int16)
             self.outstream.write(ns.tobytes())
