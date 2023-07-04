@@ -8,7 +8,7 @@ from time import sleep
 
 class AudioBuffer:
 
-    RATE = 8000
+    RATE = 16000
     CHUNK = int(RATE / 10)
     
     def __init__(self, chunks: int = 5) -> None:
@@ -48,12 +48,14 @@ class AudioBuffer:
         while True:
             raw_data = self.stream.read(self.CHUNK)
             
-            
+
             decoded = np.frombuffer(raw_data, np.int16)
+            
             m = np.fft.rfft(decoded)
-            m = np.roll(m,70)
-            m[0:70] = 0
-            nm = np.fft.irfft(m)
+
+            new_m = np.roll(m,-40)
+            new_m[-40:] = 0
+            nm = np.fft.irfft(new_m)
             ns = nm.astype(np.int16)
             self.outstream.write(ns.tobytes())
             self.frames.append(decoded)
