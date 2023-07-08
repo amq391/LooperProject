@@ -36,16 +36,34 @@ def audio_callback(in_data, frame_count, time_info, status):
     speech = np.frombuffer(in_data, dtype=np.float32)
 
     # Process the speech using the modulator signal
-    vocoded = vocoder(speech, modulator, window_size=2048, hop_length=512)
+    vocoded = vocoder(speech, modulator, window_size=1024, hop_length=512)
 
     # Convert the vocoded signal back to raw audio data
     output_data = vocoded.astype(np.float32).tobytes()
 
     return (output_data, pyaudio.paContinue)
 
-# Load the modulator signal
+# Load the modulator signal from file
 modulator_file = 'saw.wav'
 modulator, sr_modulator = librosa.load(modulator_file, sr=None)
+
+# Load the modulator signal from librosa tone library
+#tone = librosa.tone(440, sr=44100, length=4410)
+#modulator = tone
+
+# Load the modulator signal with a musical chord
+#tone_a = librosa.tone(440, sr=44100, length=4410)
+#tone_c_sharp = librosa.tone(554.37, sr=44100, length=4410)
+#tone_e = librosa.tone(659.25, sr=44100, length=4410)
+
+#tone_a_fft = librosa.stft(tone_a, n_fft=1024, hop_length=512)
+#tone_c_sharp_fft = librosa.stft(tone_c_sharp, n_fft=1024, hop_length=512)
+#tone_e_fft = librosa.stft(tone_e, n_fft=1024, hop_length=512)
+
+#tone_fft = np.add(tone_a_fft, np.add(tone_c_sharp_fft, tone_e_fft))
+#tone = librosa.istft(tone_fft, hop_length=512)
+
+#modulator = tone
 
 # Open the audio stream
 stream = p.open(format=pyaudio.paFloat32,
