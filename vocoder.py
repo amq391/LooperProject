@@ -18,7 +18,7 @@ def vocoder(speech, modulator, window_size=1024, hop_length=512):
     speech_mag, speech_phase = np.abs(speech_stft), np.angle(speech_stft)
 
     # Apply the modulator's magnitudes to the speech's phases
-    vocoder_stft = speech_mag * np.exp(1j * np.angle(mod_stft))
+    vocoder_stft = speech_mag * np.exp(1j * ((np.angle(mod_stft))))
 
     # Inverse STFT to obtain the vocoded signal
     vocoded = librosa.istft(vocoder_stft, hop_length=hop_length)
@@ -38,6 +38,7 @@ def audio_callback(in_data, frame_count, time_info, status):
     # Process the speech using the modulator signal
     vocoded = vocoder(speech, modulator, window_size=1024, hop_length=512)
 
+
     # Convert the vocoded signal back to raw audio data
     output_data = vocoded.astype(np.float32).tobytes()
 
@@ -48,7 +49,7 @@ modulator_file = 'saw.wav'
 modulator, sr_modulator = librosa.load(modulator_file, sr=None)
 
 # Load the modulator signal from librosa tone library
-#tone = librosa.tone(440, sr=44100, length=4410)
+#tone = librosa.tone(100, sr=44100, length=4410)
 #modulator = tone
 
 # Load the modulator signal with a musical chord
